@@ -18,7 +18,7 @@ List<DropdownMenuItem<String>>? get getModelsItem {
       List<DropdownMenuItem<String>>.generate(
           models.length,
           (index) => DropdownMenuItem(
-            value: models[index],
+              value: models[index],
               child: TextWidget(label: models[index], fontSize: 15)));
   return modelsItems;
 }
