@@ -1,22 +1,26 @@
+import 'package:chatgpt/providers/models_provider.dart';
 import 'package:chatgpt/services/api_service.dart';
 import 'package:chatgpt/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:chatgpt/constants/constants.dart';
-import 'package:chatgpt/models/main_model.dart';
+import 'package:provider/provider.dart';
+import '../constants/constants.dart';
+import '../models/main_model.dart';
 
-class ModelsDrowDownWidget extends StatefulWidget {
-  const ModelsDrowDownWidget({super.key});
+class ModelsDropDownWidget extends StatefulWidget {
+  const ModelsDropDownWidget({super.key});
 
   @override
-  State<ModelsDrowDownWidget> createState() => _ModelsDrowDownWidgetState();
+  State<ModelsDropDownWidget> createState() => _ModelsDropDownWidgetState();
 }
 
-class _ModelsDrowDownWidgetState extends State<ModelsDrowDownWidget> {
-  String currentModel = "text-davinci-003";
+class _ModelsDropDownWidgetState extends State<ModelsDropDownWidget> {
+  String? currentModel;
   @override
   Widget build(BuildContext context) {
+    final modelsProvider = Provider.of<ModelsProvider>(context, listen: false);
+    currentModel = modelsProvider.getCurrentModel;
     return FutureBuilder<List<MainModel>>(
-        future: ApiService.getModels(),
+        future: modelsProvider.getAllModels(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -42,6 +46,9 @@ class _ModelsDrowDownWidgetState extends State<ModelsDrowDownWidget> {
                       setState(() {
                         currentModel = value.toString();
                       });
+                      modelsProvider.setCurrentModel(
+                        value.toString(),
+                      );
                     },
                   ),
                 );

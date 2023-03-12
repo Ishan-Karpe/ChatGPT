@@ -1,6 +1,9 @@
 import 'package:chatgpt/constants/constants.dart';
+import 'package:chatgpt/models/main_model.dart';
+import 'package:chatgpt/providers/models_provider.dart';
 import 'package:chatgpt/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +14,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ChatGPT 2.0',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          scaffoldBackgroundColor: scaffoldBackgroundColor,
-          appBarTheme: AppBarTheme(color: cardColor)),
-      home: const ChatScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_)=> ModelsProvider()
+        ),
+      ],
+      child: MaterialApp(
+        title: 'ChatGPT 2.0',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            scaffoldBackgroundColor: scaffoldBackgroundColor,
+            appBarTheme: AppBarTheme(color: cardColor)),
+        home: const ChatScreen(),
+      ),
     );
   }
 }
