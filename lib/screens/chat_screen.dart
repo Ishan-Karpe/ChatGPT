@@ -132,6 +132,16 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> sendMessageFCT(
       {required ModelsProvider modelsProvider,
       required ChatProvider chatProvider}) async {
+    if (_isTyping) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: TextWidget(
+          label: "Unable to send multiple messages at a time.",
+        ),
+        backgroundColor: Colors.red,
+      ));
+
+      return;
+    }
     if (textEditingController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: TextWidget(
@@ -143,20 +153,15 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
     try {
+      String msg = textEditingController.text;
       setState(() {
         _isTyping = true;
-        // chatList.add(ChatModel(msg: textEditingController.text, chatIndex: 0));
-        chatProvider.addUserMessage(msg: textEditingController.text);
+        chatProvider.addUserMessage(msg: msg);
         textEditingController.clear();
         focusNode.unfocus();
       });
       await chatProvider.sendMessageAndGetAnswers(
-          msg: textEditingController.text,
-          chosenModelId: modelsProvider.getCurrentModel);
-      // chatList.addAll(await ApiService.sendMessage(
-      //   message: textEditingController.text,
-      //   modelId: modelsProvider.getCurrentModel,
-      // ));
+          msg: msg, chosenModelId: modelsProvider.getCurrentModel);
       setState(() {});
     } catch (error) {
       log("error $error");

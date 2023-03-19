@@ -1,5 +1,4 @@
 import 'package:chatgpt/providers/models_provider.dart';
-import 'package:chatgpt/services/api_service.dart';
 import 'package:chatgpt/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
